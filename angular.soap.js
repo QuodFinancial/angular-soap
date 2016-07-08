@@ -1,3 +1,5 @@
+var withCredentials = false;
+
 angular.module('angularSoap', [])
 
 .provider("$soap", function $soapProvider() {
@@ -6,6 +8,13 @@ angular.module('angularSoap', [])
 	this.activateLogs = function activateLogs() {
 		logsActivated = true;
 	};
+
+	/**
+	 * Call activateCrossSite() to use credentials on cross-site Access-Control requests.
+	 */
+	this.activateCrossSite = function activateCrossSite() {
+		withCredentials = true;
+	}
 
 	this.$get = ['$q',function($q){
 		return {
@@ -32,7 +41,7 @@ angular.module('angularSoap', [])
 					console.log(url, action, params);
 				}
 
-				SOAPClient.invoke(url, action, soapParams, true, soapCallback);
+				SOAPClient.invoke(url, action, soapParams, true, soapCallback, withCredentials);
 
 				return deferred.promise;
 			},
